@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; text-align: center; padding-top: 50px; }
+        #display { font-size: 48px; margin-bottom: 20px; }
+        .controls button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 0 5px; }
+        .start { background: #28a745; color: white; border: none; }
+        .pause { background: #ffc107; border: none; }
+        .reset { background: #dc3545; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div id="display">00:00:00</div>
+    <div class="controls">
+        <button class="start" onclick="start()">Start</button>
+        <button class="pause" onclick="pause()">Pause</button>
+        <button class="reset" onclick="reset()">Reset</button>
+    </div>
+
+    <script>
+        let startTime, elapsedTime = 0, timerInterval;
+
+        function timeToString(time) {
+            let diffInMin = time / (60 * 1000);
+            let mm = Math.floor(diffInMin);
+
+            let diffInSec = (diffInMin - mm) * 60;
+            let ss = Math.floor(diffInSec);
+
+            let diffInMs = (diffInSec - ss) * 100;
+            let ms = Math.floor(diffInMs);
+
+            return `${mm.toString().padStart(2, "0")}:${ss.toString().padStart(2, "0")}:${ms.toString().padStart(2, "0")}`;
+        }
+
+        function start() {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(function printTime() {
+                elapsedTime = Date.now() - startTime;
+                document.getElementById("display").innerHTML = timeToString(elapsedTime);
+            }, 10);
+        }
+
+        function pause() {
+            clearInterval(timerInterval);
+        }
+
+        function reset() {
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            document.getElementById("display").innerHTML = "00:00:00";
+        }
+    </script>
+</body>
+</html>
