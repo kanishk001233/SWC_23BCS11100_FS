@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  #item-list { list-style: none; padding: 0; max-width: 400px; margin: 20px auto; }
+  .list-item { 
+    display: flex; justify-content: space-between; 
+    padding: 10px; border-bottom: 1px solid #eee; background: #fff;
+  }
+  .delete-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+  .delete-btn:hover { background: #cc0000; }
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center">Notification Feed (1000 Items)</h2>
+<ul id="item-list"></ul>
+
+<script>
+const list = document.getElementById('item-list');
+
+// 1. EVENT DELEGATION: Single listener for all current and future buttons
+list.addEventListener('click', (event) => {
+  if (event.target.classList.contains('delete-btn')) {
+    const item = event.target.closest('li');
+    item.remove();
+    console.log("Efficiently deleted an item using event delegation.");
+  }
+});
+
+// 2. DYNAMIC RENDERING: Generating 1000 items
+const fragment = document.createDocumentFragment();
+for (let i = 1; i <= 1000; i++) {
+  const li = document.createElement('li');
+  li.className = 'list-item';
+  li.innerHTML = `
+    <span>Notification #${i}</span>
+    <button class="delete-btn">Delete</button>
+  `;
+  fragment.appendChild(li);
+}
+list.appendChild(fragment);
+</script>
+
+</body>
+</html>
