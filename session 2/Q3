@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .kanban-board { display: flex; gap: 20px; padding: 20px; font-family: sans-serif; background: #f4f5f7; height: 100vh; }
+  .column { background: #ebecf0; border-radius: 5px; width: 250px; padding: 10px; min-height: 200px; }
+  .column h3 { text-align: center; color: #172b4d; }
+  .card { 
+    background: white; margin: 10px 0; padding: 15px; border-radius: 3px; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2); cursor: grab; 
+  }
+  .card:active { cursor: grabbing; }
+  .dragging { opacity: 0.5; border: 2px dashed #007bff; }
+</style>
+</head>
+<body>
+
+<div class="kanban-board">
+  <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3>To Do</h3>
+    <div id="card1" class="card" draggable="true" ondragstart="drag(event)">Fix Login Bug</div>
+    <div id="card2" class="card" draggable="true" ondragstart="drag(event)">Design Homepage</div>
+  </div>
+
+  <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3>In Progress</h3>
+    <div id="card3" class="card" draggable="true" ondragstart="drag(event)">API Integration</div>
+  </div>
+
+  <div class="column" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <h3>Done</h3>
+    <div id="card4" class="card" draggable="true" ondragstart="drag(event)">Project Setup</div>
+  </div>
+</div>
+
+<script>
+function allowDrop(ev) {
+  ev.preventDefault(); // Necessary to allow dropping
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+  ev.target.classList.add('dragging');
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  const draggedElement = document.getElementById(data);
+  draggedElement.classList.remove('dragging');
+  
+  // Ensure we drop into the column container, not another card
+  const target = ev.target.classList.contains('column') ? ev.target : ev.target.closest('.column');
+  if (target) {
+    target.appendChild(draggedElement);
+  }
+}
+</script>
+
+</body>
+</html>
