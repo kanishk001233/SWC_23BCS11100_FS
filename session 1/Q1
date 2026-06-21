@@ -1,0 +1,42 @@
+<!-- HTML Structure -->
+<div id="todo-app">
+  <input type="text" id="todo-input" placeholder="Add a new task...">
+  <button onclick="addTask()">Add</button>
+  <ul id="todo-list"></ul>
+</div>
+
+<script>
+function addTask() {
+  const input = document.getElementById('todo-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const li = document.createElement('li');
+  li.innerHTML = `
+    <span class="task-text" onclick="toggleComplete(this)">${text}</span>
+    <button onclick="editTask(this)">Edit</button>
+    <button onclick="deleteTask(this)">Delete</button>
+  `;
+  document.getElementById('todo-list').appendChild(li);
+  input.value = '';
+}
+
+function toggleComplete(element) {
+  element.classList.toggle('completed');
+}
+
+function deleteTask(button) {
+  button.parentElement.remove();
+}
+
+function editTask(button) {
+  const span = button.parentElement.querySelector('.task-text');
+  const newText = prompt("Edit task:", span.innerText);
+  if (newText) span.innerText = newText;
+}
+</script>
+
+<style>
+.completed { text-decoration: line-through; color: gray; }
+li { margin-bottom: 5px; }
+</style>
