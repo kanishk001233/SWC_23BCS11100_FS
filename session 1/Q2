@@ -1,0 +1,30 @@
+<!-- HTML Structure -->
+<div id="char-limit-app">
+  <textarea id="text-area" maxlength="200" placeholder="What's happening?" oninput="updateCounter()"></textarea>
+  <div id="counter">Remaining: 200</div>
+  <button id="submit-btn">Submit</button>
+</div>
+
+<script>
+function updateCounter() {
+  const textarea = document.getElementById('text-area');
+  const counter = document.getElementById('counter');
+  const remaining = 200 - textarea.value.length;
+  
+  counter.innerText = `Remaining: ${remaining}`;
+  
+  // Warning at 80-90% (160-180 characters used)
+  if (remaining <= 40 && remaining > 20) {
+    counter.style.color = "orange";
+  } else if (remaining <= 20) {
+    counter.style.color = "red";
+  } else {
+    counter.style.color = "black";
+  }
+}
+</script>
+
+<style>
+textarea { width: 100%; height: 100px; display: block; }
+#counter { font-weight: bold; margin-top: 5px; }
+</style>
