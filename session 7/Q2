@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+
+const ResilientFetch = () => {
+  const [status, setStatus] = useState('Idle');
+  const [attempts, setAttempts] = useState(0);
+
+  const fetchWithRetry = async (url, retries = 3) => {
+    setStatus('Fetching...');
+    for (let i = 0; i <= retries; i++) {
+      try {
+        setAttempts(i + 1);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        setStatus('Success! Data loaded.');
+        return data;
+      } catch (err) {
+        if (i === retries) {
+          setStatus(`Failed after ${retries + 1} attempts. Error: ${err.message}`);
+        } else {
+          setStatus(`Attempt ${i + 1} failed. Retrying in 2 seconds...`);
+          await new Promise(res => setTimeout(res, 2000));
+        }
+      }
+    }
+  };
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'Arial' }}>
+      <h3>Resilient API Handler</h3>
+      <p>Status: <strong>{status}</strong></p>
+      {status.includes('Attempt') && <p>Current Attempt: {attempts}</p>}
+      <button 
+        onClick={() => fetchWithRetry('https://invalid-api-url.com/data')}
+        style={{ padding: '10px 20px', cursor: 'pointer' }}
+      >
+        Trigger Mock API Call
+      </button>
+    </div>
+  );
+};
+
+export default ResilientFetch;
