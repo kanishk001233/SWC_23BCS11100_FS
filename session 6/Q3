@@ -1,0 +1,65 @@
+import React, { useState, useEffect } from 'react';
+
+const ImageCarousel = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (!isPaused) {
+      const interval = setInterval(() => {
+        nextSlide();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [currentIndex, isPaused]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  if (!images || images.length === 0) return <p>No images to display</p>;
+
+  return (
+    <div 
+      style={{ width: '400px', margin: 'auto', position: 'relative', textAlign: 'center' }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div style={{ height: '250px', overflow: 'hidden', borderRadius: '8px' }}>
+        <img 
+          src={images[currentIndex]} 
+          alt={`Slide ${currentIndex}`} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        />
+      </div>
+      
+      <button onClick={prevSlide} style={btnStyle}>Prev</button>
+      <button onClick={nextSlide} style={{ ...btnStyle, right: '0' }}>Next</button>
+      
+      <div style={{ marginTop: '10px' }}>
+        {images.map((_, i) => (
+          <span key={i} style={{ 
+            display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', 
+            background: i === currentIndex ? '#007bff' : '#ccc', margin: '0 5px' 
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const btnStyle = {
+  position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+  background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', 
+  padding: '10px', cursor: 'pointer'
+};
+
+// Usage Example:
+// const images = ["https://picsum.photos/400/250?1", "https://picsum.photos/400/250?2"];
+// <ImageCarousel images={images} />
+
+export default ImageCarousel;
