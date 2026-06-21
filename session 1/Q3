@@ -1,0 +1,47 @@
+<!-- HTML Structure -->
+<div id="carousel-container" onmouseover="pauseSlide()" onmouseout="startSlide()">
+  <div id="carousel-images">
+    <img src="image1.jpg" class="slide active">
+    <img src="image2.jpg" class="slide">
+    <img src="image3.jpg" class="slide">
+  </div>
+  <button onclick="prevSlide()">Prev</button>
+  <button onclick="nextSlide()">Next</button>
+</div>
+
+<script>
+let currentIndex = 0;
+let slideInterval;
+const slides = document.querySelectorAll('.slide');
+
+function showSlide(index) {
+  slides.forEach((s, i) => s.classList.toggle('active', i === index));
+}
+
+function nextSlide() {
+  currentIndex = (currentIndex + 1) % slides.length;
+  showSlide(currentIndex);
+}
+
+function prevSlide() {
+  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+  showSlide(currentIndex);
+}
+
+function startSlide() {
+  slideInterval = setInterval(nextSlide, 3000);
+}
+
+function pauseSlide() {
+  clearInterval(slideInterval);
+}
+
+// Initial start
+startSlide();
+</script>
+
+<style>
+#carousel-container { position: relative; width: 300px; }
+.slide { display: none; width: 100%; }
+.slide.active { display: block; }
+</style>
