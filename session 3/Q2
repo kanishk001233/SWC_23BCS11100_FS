@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #feed { max-width: 500px; margin: 0 auto; font-family: Arial; }
+        .post { background: #f9f9f9; border: 1px solid #ddd; padding: 50px; margin: 10px 0; text-align: center; border-radius: 8px; }
+        #loading { text-align: center; padding: 20px; font-weight: bold; color: #555; }
+    </style>
+</head>
+<body>
+    <div id="feed">
+        <div class="post">Post #1</div>
+        <div class="post">Post #2</div>
+        <div class="post">Post #3</div>
+    </div>
+    <div id="loading" style="display:none;">Loading more posts...</div>
+
+    <script>
+        let postCount = 3;
+        let isLoading = false;
+
+        window.onscroll = function() {
+            // Check if user is near the bottom (within 100px)
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                loadMore();
+            }
+        };
+
+        function loadMore() {
+            if (isLoading) return; // Prevent duplicate calls
+            isLoading = true;
+            document.getElementById('loading').style.display = 'block';
+
+            // Simulate API Call
+            setTimeout(() => {
+                const feed = document.getElementById('feed');
+                for (let i = 0; i < 3; i++) {
+                    postCount++;
+                    const div = document.createElement('div');
+                    div.className = 'post';
+                    div.innerText = `Post #${postCount}`;
+                    feed.appendChild(div);
+                }
+                isLoading = false;
+                document.getElementById('loading').style.display = 'none';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
