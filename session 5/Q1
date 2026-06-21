@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .item-list { border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px; }
+        .item { padding: 10px; border-bottom: 1px solid #eee; }
+        .item:last-child { border-bottom: none; }
+        .pagination { display: flex; gap: 5px; align-items: center; }
+        button { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; background: #fff; }
+        button.active { background: #007bff; color: white; border-color: #007bff; }
+        button:disabled { cursor: not-allowed; opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <h3>Product List</h3>
+    <div id="list" class="item-list"></div>
+    <div class="pagination">
+        <button id="prevBtn" onclick="changePage(currentPage - 1)">Prev</button>
+        <div id="pageNumbers"></div>
+        <button id="nextBtn" onclick="changePage(currentPage + 1)">Next</button>
+    </div>
+
+    <script>
+        const data = Array.from({ length: 50 }, (_, i) => `Product Item #${i + 1}`);
+        const itemsPerPage = 10;
+        let currentPage = 1;
+
+        function renderList() {
+            const listDiv = document.getElementById('list');
+            listDiv.innerHTML = '';
+            
+            const start = (currentPage - 1) * itemsPerPage;
+            const paginatedItems = data.slice(start, start + itemsPerPage);
+
+            paginatedItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerText = item;
+                listDiv.appendChild(div);
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pageNumbers = document.getElementById('pageNumbers');
+            pageNumbers.innerHTML = '';
+            const totalPages = Math.ceil(data.length / itemsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                if (i === currentPage) btn.className = 'active';
+                btn.onclick = () => changePage(i);
+                pageNumbers.appendChild(btn);
+            }
+
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderList();
+        }
+
+        renderList();
+    </script>
+</body>
+</html>
