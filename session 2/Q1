@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .tab-container { font-family: Arial, sans-serif; width: 80%; margin: 20px auto; }
+  .tabs { overflow: hidden; border-bottom: 2px solid #ccc; display: flex; }
+  .tab-btn {
+    background-color: #f1f1f1; border: none; outline: none;
+    cursor: pointer; padding: 14px 20px; transition: 0.3s; font-size: 16px;
+  }
+  .tab-btn:hover { background-color: #ddd; }
+  .tab-btn.active { background-color: #fff; border-bottom: 2px solid #007bff; color: #007bff; font-weight: bold; }
+  .tab-content { display: none; padding: 20px; border: 1px solid #ccc; border-top: none; animation: fadeEffect 0.5s; }
+  @keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
+</style>
+</head>
+<body>
+
+<div class="tab-container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="openTab(event, 'Overview')">Overview</button>
+    <button class="tab-btn" onclick="openTab(event, 'Details')">Details</button>
+    <button class="tab-btn" onclick="openTab(event, 'Settings')">Settings</button>
+  </div>
+
+  <div id="Overview" class="tab-content" style="display:block;">
+    <h3>Overview</h3>
+    <p>This is the main dashboard overview showing high-level metrics.</p>
+  </div>
+
+  <div id="Details" class="tab-content">
+    <h3>Details</h3>
+    <p>Detailed breakdown of your recent activities and reports.</p>
+  </div>
+
+  <div id="Settings" class="tab-content">
+    <h3>Settings</h3>
+    <p>Manage your account preferences and system configurations here.</p>
+  </div>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+  const contents = document.getElementsByClassName("tab-content");
+  for (let content of contents) content.style.display = "none";
+  
+  const buttons = document.getElementsByClassName("tab-btn");
+  for (let btn of buttons) btn.classList.remove("active");
+  
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.classList.add("active");
+}
+</script>
+
+</body>
+</html>
