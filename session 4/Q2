@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div id="status" style="font-family: Arial; padding: 20px;">Initializing request...</div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+
+        async function fetchWithRetry(url, retries = 3) {
+            for (let i = 0; i <= retries; i++) {
+                try {
+                    // Using a broken URL to demonstrate retries
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("Server Error");
+                    return await response.json();
+                } catch (err) {
+                    if (i === retries) {
+                        statusDiv.innerHTML = `<b style="color:red">Final Attempt Failed.</b> Error: ${err.message}`;
+                        throw err;
+                    }
+                    statusDiv.innerHTML = `Attempt ${i + 1} failed. Retrying in 1s...`;
+                    await new Promise(res => setTimeout(res, 1000));
+                }
+            }
+        }
+
+        // Call with an invalid URL to see the retry logic in action
+        fetchWithRetry('https://this-url-does-not-exist-xyz.com/data')
+            .then(data => statusDiv.innerText = "Success!")
+            .catch(err => console.log("Retries exhausted"));
+    </script>
+</body>
+</html>
