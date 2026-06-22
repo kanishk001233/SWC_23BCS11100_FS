@@ -1,0 +1,35 @@
+import java.io.*;
+
+public class FileProcessor {
+    public static void processUserData(String filePath) {
+        int processedCount = 0;
+        int failedCount = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    if (line.trim().isEmpty()) throw new Exception("Empty line");
+                    
+                    System.out.println("Processing: " + line);
+                    processedCount++;
+                } catch (Exception e) {
+                    System.out.println("Skipping invalid record: " + line);
+                    failedCount++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found - " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: Reading file failed - " + e.getMessage());
+        }
+
+        System.out.println("\n--- Summary ---");
+        System.out.println("Processed: " + processedCount);
+        System.out.println("Failed: " + failedCount);
+    }
+
+    public static void main(String[] args) {
+        processUserData("users.txt");
+    }
+}
