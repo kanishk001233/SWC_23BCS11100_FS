@@ -1,0 +1,33 @@
+abstract class Payment {
+    abstract void processPayment(double amount);
+}
+
+class CreditCardPayment extends Payment {
+    private String cardNumber;
+
+    public CreditCardPayment(String cardNumber) { this.cardNumber = cardNumber; }
+
+    @Override
+    void processPayment(double amount) {
+        if (cardNumber.length() == 16) {
+            System.out.println("Processing Credit Card payment of $" + amount);
+        } else {
+            System.out.println("Invalid Card Number!");
+        }
+    }
+}
+
+class UPIPayment extends Payment {
+    private String upiId;
+
+    public UPIPayment(String upiId) { this.upiId = upiId; }
+
+    @Override
+    void processPayment(double amount) {
+        if (upiId.contains("@")) {
+            System.out.println("Processing UPI payment of $" + amount);
+        } else {
+            System.out.println("Invalid UPI ID!");
+        }
+    }
+}
