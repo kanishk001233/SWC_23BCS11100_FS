@@ -1,0 +1,36 @@
+interface Notification {
+    void send(String message);
+    
+    // Default method for bulk notifications to demonstrate extensibility
+    default void sendBulk(String[] messages) {
+        for (String msg : messages) {
+            send(msg);
+        }
+    }
+}
+
+class EmailNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("Sending Email: " + message);
+    }
+}
+
+class SMSNotification implements Notification {
+    @Override
+    public void send(String message) {
+        System.out.println("Sending SMS: " + message);
+    }
+}
+public class NotificationSystem {
+    public static void main(String[] args) {
+        Notification email = new EmailNotification();
+        Notification sms = new SMSNotification();
+
+        email.send("Welcome to our service!");
+        sms.send("Your OTP is 1234");
+
+        String[] bulkMsgs = {"Alert 1", "Alert 2"};
+        email.sendBulk(bulkMsgs);
+    }
+}
