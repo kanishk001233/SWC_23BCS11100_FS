@@ -1,0 +1,32 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Counter {
+    private int count = 0;
+    public synchronized void incrementSync() {
+        count++;
+    }
+    public int getCount() { return count; }
+
+    private AtomicInteger atomicCount = new AtomicInteger(0);
+    public void incrementAtomic() {
+        atomicCount.incrementAndGet();
+    }
+    public int getAtomicCount() { return atomicCount.get(); }
+}
+
+public class ThreadSafeCounter {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        int numThreads = 1000;
+
+        Thread[] threads = new Thread[numThreads];
+        for (int i = 0; i < numThreads; i++) {
+            threads[i] = new Thread(counter::incrementAtomic);
+            threads[i].start();
+        }
+
+        for (Thread t : threads) t.join();
+
+        System.out.println("Final Atomic Counter Value: " + counter.getAtomicCount());
+    }
+}
