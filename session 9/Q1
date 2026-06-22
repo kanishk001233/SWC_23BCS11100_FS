@@ -1,0 +1,61 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Book {
+    private String id;
+    private String title;
+    private boolean isIssued;
+
+    public Book(String id, String title) {
+        this.id = id;
+        this.title = title;
+        this.isIssued = false;
+    }
+
+    public String getId() { return id; }
+    public String getTitle() { return title; }
+    public boolean isIssued() { return isIssued; }
+    public void setIssued(boolean issued) { isIssued = issued; }
+
+    @Override
+    public String toString() {
+        return "Book[ID=" + id + ", Title=" + title + ", Status=" + (isIssued ? "Issued" : "Available") + "]";
+    }
+}
+
+class User {
+    private String name;
+    private List<Book> issuedBooks = new ArrayList<>();
+
+    public User(String name) { this.name = name; }
+    public String getName() { return name; }
+    public List<Book> getIssuedBooks() { return issuedBooks; }
+}
+
+class Library {
+    private List<Book> books = new ArrayList<>();
+
+    // Overloaded addBook()
+    public void addBook(Book book) { books.add(book); }
+    public void addBook(List<Book> newBooks) { books.addAll(newBooks); }
+
+    public void issueBook(User user, String bookId) {
+        for (Book b : books) {
+            if (b.getId().equals(bookId)) {
+                if (!b.isIssued()) {
+                    b.setIssued(true);
+                    user.getIssuedBooks().add(b);
+                    System.out.println("Book issued to " + user.getName());
+                } else {
+                    System.out.println("Error: Book already issued.");
+                }
+                return;
+            }
+        }
+    }
+
+    public void displayStatus() {
+        System.out.println("\n--- Library Inventory ---");
+        for (Book b : books) System.out.println(b);
+    }
+}
