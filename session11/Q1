@@ -1,0 +1,30 @@
+public class NestedExceptionHandling {
+    public static void main(String[] args) {
+        try {
+            System.out.println("Starting Parsing...");
+            try {
+                int data = Integer.parseInt("123A"); // Potential NumberFormatException
+            } catch (NumberFormatException e) {
+                System.err.println("Parsing Error: Invalid number format. " + e.getMessage());
+            }
+
+            System.out.println("Starting Calculation...");
+            try {
+                int result = 10 / 0; // Potential ArithmeticException
+            } catch (ArithmeticException e) {
+                System.err.println("Calculation Error: Division by zero. " + e.getMessage());
+            }
+
+            System.out.println("Starting Database Simulation...");
+            try {
+                throw new Exception("Connection Timeout"); // Simulated Database Exception
+            } catch (Exception e) {
+                System.err.println("Database Error: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Global System Error: " + e.getMessage());
+        }
+        System.out.println("Execution completed successfully despite individual failures.");
+    }
+}
