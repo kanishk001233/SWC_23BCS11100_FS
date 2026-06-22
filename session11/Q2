@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class RegistrationSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.util.in);
+        boolean isValid = false;
+
+        while (!isValid) {
+            try {
+                System.out.print("Enter Age: ");
+                int age = Integer.parseInt(scanner.nextLine());
+                if (age <= 18) throw new IllegalArgumentException("Age must be greater than 18.");
+
+                System.out.print("Enter Email: ");
+                String email = scanner.nextLine();
+                if (!email.contains("@")) throw new IllegalArgumentException("Invalid email format (must contain '@').");
+
+                System.out.println("Registration Successful!");
+                isValid = true;
+            } catch (IllegalArgumentException e) {
+                System.err.println("Validation Error: " + e.getMessage() + " Please try again.");
+            } catch (Exception e) {
+                System.err.println("Unexpected Error: " + e.getMessage());
+            }
+        }
+    }
+}
