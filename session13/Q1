@@ -1,0 +1,40 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Employee {
+    private String name;
+    private double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public String getName() { return name; }
+    public double getSalary() { return salary; }
+
+    @Override
+    public String toString() {
+        return String.format("Employee{Name='%s', Salary=%.2f}", name, salary);
+    }
+}
+
+public class Session13Q1 {
+    public static void main(String[] args) {
+        List<Employee> employees = Arrays.asList(
+            new Employee("Alice", 60000),
+            new Employee("Bob", 45000),
+            new Employee("Charlie", 75000),
+            new Employee("David", 50000),
+            new Employee("Eva", 52000)
+        );
+
+        List<Employee> filteredEmployees = employees.stream()
+            .filter(emp -> emp.getSalary() > 50000)               
+            .sorted(Comparator.comparing(Employee::getName))      
+            .collect(Collectors.toList());                        
+
+        System.out.println("Employees with salary > 50,000 (Sorted by Name):");
+        filteredEmployees.forEach(System.out::println);
+    }
+}
