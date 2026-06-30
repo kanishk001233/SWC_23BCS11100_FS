@@ -1,0 +1,22 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Session13Q3 {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("apple", "bat", "car", "banana", "dog", "elephant", "ant");
+
+        Map<Integer, List<String>> wordsByLength = words.stream()
+            .collect(Collectors.groupingBy(String::length));
+
+        System.out.println("Words grouped by length:");
+        System.out.println(wordsByLength);
+
+        Map<Integer, Long> countByLength = words.stream()
+            .collect(Collectors.groupingBy(String::length, Collectors.counting()));
+
+        System.out.println("\nCount of occurrences per word length:");
+        countByLength.forEach((length, count) -> 
+            System.out.println("Length " + length + " has " + count + " word(s)")
+        );
+    }
+}
