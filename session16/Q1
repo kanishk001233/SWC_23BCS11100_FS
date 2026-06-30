@@ -1,0 +1,69 @@
+abstract class Ride {
+    protected boolean isPeakHour;
+
+    public Ride(boolean isPeakHour) {
+        this.isPeakHour = isPeakHour;
+    }
+
+    public abstract double calculateFare(double distance);
+}
+
+class MiniRide extends Ride {
+    public MiniRide(boolean isPeakHour) {
+        super(isPeakHour);
+    }
+
+    @Override
+    public double calculateFare(double distance) {
+        double fare = 50.0 + (distance * 10.0);
+        if (isPeakHour) {
+            fare *= 1.2;
+        }
+        return fare;
+    }
+}
+
+class SedanRide extends Ride {
+    public SedanRide(boolean isPeakHour) {
+        super(isPeakHour);
+    }
+
+    @Override
+    public double calculateFare(double distance) {
+        double fare = 70.0 + (distance * 15.0);
+        if (isPeakHour) {
+            fare *= 1.3;
+        }
+        return fare;
+    }
+}
+
+class SuvRide extends Ride {
+    public SuvRide(boolean isPeakHour) {
+        super(isPeakHour);
+    }
+
+    @Override
+    public double calculateFare(double distance) {
+        double fare = 100.0 + (distance * 20.0);
+        if (isPeakHour) {
+            fare *= 1.5;
+        }
+        return fare;
+    }
+}
+
+public class RideBookingSystem {
+    public static void main(String[] args) {
+        double distance = 12.5;
+        boolean peakHour = true;
+
+        Ride mini = new MiniRide(peakHour);
+        Ride sedan = new SedanRide(peakHour);
+        Ride suv = new SuvRide(peakHour);
+
+        System.out.println("Mini Fare: " + mini.calculateFare(distance));
+        System.out.println("Sedan Fare: " + sedan.calculateFare(distance));
+        System.out.println("SUV Fare: " + suv.calculateFare(distance));
+    }
+}
