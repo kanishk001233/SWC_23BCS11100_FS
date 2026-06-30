@@ -1,0 +1,41 @@
+class TicketBookingSystem {
+    private int availableSeats;
+
+    public TicketBookingSystem(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public synchronized void bookTicket(int seats) {
+        String threadName = Thread.currentThread().getName();
+        if (availableSeats >= seats) {
+            availableSeats -= seats;
+            System.out.println(threadName + " successfully booked " + seats + " seats.");
+        } else {
+            System.out.println(threadName + " failed to book " + seats + " seats. Insufficient capacity.");
+        }
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+}
+
+public class RailwayBookingSystem {
+    public static void main(String[] args) throws InterruptedException {
+        TicketBookingSystem system = new TicketBookingSystem(10);
+
+        Thread user1 = new Thread(() -> system.bookTicket(4), "User-1");
+        Thread user2 = new Thread(() -> system.bookTicket(5), "User-2");
+        Thread user3 = new Thread(() -> system.bookTicket(3), "User-3");
+
+        user1.start();
+        user2.start();
+        user3.start();
+
+        user1.join();
+        user2.join();
+        user3.join();
+
+        System.out.println("Final seat count: " + system.getAvailableSeats());
+    }
+}
