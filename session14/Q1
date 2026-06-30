@@ -1,0 +1,51 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+class Student {
+    private String name;
+    private double marks;
+
+    public Student(String name, double marks) {
+        this.name = name;
+        this.marks = marks;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getMarks() {
+        return marks;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{name='" + name + "', marks=" + marks + "}";
+    }
+}
+
+public class StudentSorter {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Alice", 85.5));
+        students.add(new Student("Bob", 92.0));
+        students.add(new Student("Charlie", 85.5));
+        students.add(new Student("David", 88.0));
+
+        students.sort(new Comparator<Student>() {
+            @Override
+            public int compare(Student s1, Student s2) {
+                int marksCompare = Double.compare(s2.getMarks(), s1.getMarks());
+                if (marksCompare != 0) {
+                    return marksCompare;
+                }
+                return s1.getName().compareTo(s2.getName());
+            }
+        });
+
+        for (Student student : students) {
+            System.out.println(student);
+        }
+    }
+}
