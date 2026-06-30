@@ -1,0 +1,64 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class SimpleConnectionPool {
+    private static final String URL = "jdbc:mysql://localhost:3306/company_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
+    private static final int MAX_CONNECTIONS = 5;
+    
+    // Using a BlockingQueue to manage concurrent pool retrieval safely
+    private final BlockingQueue<Connection> pool;
+
+    public SimpleConnectionPool() throws SQLException {
+        this.pool = new LinkedBlockingQueue<>(MAX_CONNECTIONS);
+        for (int i = 0; i < MAX_CONNECTIONS; i++) {
+            pool.add(DriverManager.getConnection(URL, USER, PASSWORD));
+        }
+        System.out.println("Connection pool initialized with " + MAX_CONNECTIONS + " active connections.");
+    }
+
+    // Rent/Acquire a connection from the pool
+    public Connection getConnection() throws InterruptedException {
+        Connection connection = pool.take(); // Will wait if pool is completely drained
+        System.out.println("Connection acquired from pool. Remaining pool capacity: " + pool.size());
+        return connection;
+    }
+
+    // Release/Return connection back to pool for reuse
+    public void releaseConnection(Connection connection) {
+        if (connection != null) {
+            pool.offer(connection);
+            System.out.println("Connection successfully returned to pool. Current availability: " + pool.size());
+        }
+    }
+
+    // Shutdown pool and close active connections
+    public void shutdown() throws SQLException {
+        for (Connection conn : pool) {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+        }
+        System.out.println("All pooled database connections closed safely.");
+    }
+
+    public static void main(String[] args) {
+        try {
+            SimpleConnectionPool connectionPool = new SimpleConnectionPool();
+
+            // Simulate acquiring a connection
+            Connection clientConnection = connectionPool.getConnection();
+
+            // Simulate utilizing and completing operations, then returning connection
+            connectionPool.releaseConnection(clientConnection);
+
+            connectionPool.shutdown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
