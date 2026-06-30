@@ -1,0 +1,53 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class JdbcBatchProcessing {
+    private static final String URL = "jdbc:mysql://localhost:3306/company_db";
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
+
+    public static void main(String[] args) {
+        String insertQuery = "INSERT INTO employees (name, department, salary) VALUES (?, ?, ?)";
+        
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            
+            // Performance Optimization: Disable auto-commit to commit all records at once
+            connection.setAutoCommit(false);
+            
+            // Adding record 1 to batch
+            preparedStatement.setString(1, "John Doe");
+            preparedStatement.setString(2, "Engineering");
+            preparedStatement.setDouble(3, 75000);
+            preparedStatement.addBatch();
+            
+            // Adding record 2 to batch
+            preparedStatement.setString(1, "Jane Smith");
+            preparedStatement.setString(2, "Marketing");
+            preparedStatement.setDouble(3, 62000);
+            preparedStatement.addBatch();
+            
+            // Adding record 3 to batch
+            preparedStatement.setString(1, "Alex Jones");
+            preparedStatement.setString(2, "HR");
+            preparedStatement.setDouble(3, 54000);
+            preparedStatement.addBatch();
+            
+            // Execute the batch
+            int[] updateCounts = preparedStatement.executeBatch();
+            
+            // Commit the transaction after batch success
+            connection.commit();
+            
+            // Log successfully inserted records count
+            System.out.println("Batch execution completed successfully.");
+            System.out.println("Total records inserted: " + updateCounts.length);
+            
+        } catch (SQLException e) {
+            System.err.println("Batch processing failed! Handling rollback operations...");
+            e.printStackTrace();
+        }
+    }
+}
