@@ -1,0 +1,37 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class FileDataProcessor {
+    public static void main(String[] args) {
+        String filePath = "numbers.txt";
+        int sum = 0;
+        int totalValidNumbers = 0;
+        int totalInvalidLines = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                try {
+                    if (line.trim().isEmpty()) {
+                        totalInvalidLines++;
+                        continue;
+                    }
+                    int value = Integer.parseInt(line.trim());
+                    sum += value;
+                    totalValidNumbers++;
+                } catch (NumberFormatException e) {
+                    totalInvalidLines++;
+                }
+            }
+            System.out.println("Sum of valid integers: " + sum);
+            System.out.println("Total valid numbers: " + totalValidNumbers);
+            System.out.println("Total invalid lines: " + totalInvalidLines);
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File could not be found - " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error: General input/output failure - " + e.getMessage());
+        }
+    }
+}
