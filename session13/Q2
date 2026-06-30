@@ -1,0 +1,17 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Session13Q2 {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(10, 23, 10, 45, 23, 56, 78, 45, 90, 10);
+
+        Set<Integer> seenElements = new HashSet<>();
+        
+        Set<Integer> duplicates = numbers.stream()
+            .filter(num -> !seenElements.add(num)) 
+            .collect(Collectors.toSet());         
+
+        System.out.println("Original List: " + numbers);
+        System.out.println("Duplicate Elements: " + duplicates);
+    }
+}
